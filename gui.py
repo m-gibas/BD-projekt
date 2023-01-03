@@ -1,20 +1,64 @@
 import PySimpleGUI as sg
 # import numpy as np
 # import matplotlib.pyplot as plt
+import funkcje
 
 #!/usr/bin/python
 import psycopg2
 from config import config
 
+
+
+# def connect():
+#     """ Connect to the PostgreSQL database server """
+#     conn = None
+#     try:
+#         # read connection parameters
+#         params = config()
+
+#         # connect to the PostgreSQL server
+#         print('Connecting to the PostgreSQL database...')
+#         conn = psycopg2.connect(**params)
+		
+#         # create a cursor
+#         cur = conn.cursor()
+        
+# 	# execute a statement
+#         print('PostgreSQL database version:')
+#         cur.execute('SELECT version()')
+
+
+#         # display the PostgreSQL database server version
+#         db_version = cur.fetchone()
+#         print(db_version)
+
+        
+#     # moj wlasny select
+#         print('Moj select: ')
+#         cur.execute('SELECT * FROM lab03.uczestnik')
+#         # query = cur.fetchone()
+#         # print(query)
+#         query = cur.fetchall()
+#         for el in query:
+#             print(el)
+#         return query
+       
+# 	# close the communication with the PostgreSQL
+#         cur.close()
+#     except (Exception, psycopg2.DatabaseError) as error:
+#         print(error)
+#     finally:
+#         if conn is not None:
+#             conn.close()
+#             print('Database connection closed.')
+
 def connect():
-    """ Connect to the PostgreSQL database server """
+    """ Funkcja do laczenia uzytkownia z serverem bazy danych postgres"""
     conn = None
     try:
-        # read connection parameters
+        
         params = config()
-
-        # connect to the PostgreSQL server
-        print('Connecting to the PostgreSQL database...')
+        print('Laczenie z baza danych PostgreSQL...')
         conn = psycopg2.connect(**params)
 		
         # create a cursor
@@ -24,34 +68,30 @@ def connect():
         print('PostgreSQL database version:')
         cur.execute('SELECT version()')
 
-
         # display the PostgreSQL database server version
         db_version = cur.fetchone()
         print(db_version)
-
-        
-    # moj wlasny select
-        print('Moj select: ')
-        cur.execute('SELECT * FROM lab03.uczestnik')
-        # query = cur.fetchone()
-        # print(query)
-        query = cur.fetchall()
-        for el in query:
-            print(el)
-        return query
        
+    # wykorzystane funkcje
+
+        # cur.execute("SELECT * FROM akrobata")
+        # out = cur.fetchall()
+
+        # print(out)
+
+
 	# close the communication with the PostgreSQL
         cur.close()
+        return conn
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
-    finally:
-        if conn is not None:
-            conn.close()
-            print('Database connection closed.')
+        return 0
 
 
-
-
+if __name__ == '__main__':
+    conn = connect()
+    cur = conn.cursor()
+    cur.execute("SET search_path TO projekt;")
 
 w, h = 640, 480
 
@@ -61,7 +101,11 @@ sg.theme('DarkGreen3')
 
 layout = [  [sg.Column([[sg.Button('Wyjście' )]], element_justification='right', expand_x=True)],
             [sg.Button("Przeglądaj elementy", pad=(0,10))],
-            [sg.Button("Dodaj element", pad=(0,10))],
+            [sg.Button("Dodaj film", pad=(0,10))],
+            [sg.Text('Tytuł: '),sg.Input('', size=(8,2), key='tytulFilm')],
+            [sg.Text('Gatunek: '),sg.Input('', size=(8,2), key='gatunekFilm')],
+            [sg.Text('Rok wydania: '),sg.Input('', size=(8,2), key='rokFilm')],
+
             [sg.Button("Submit", pad=(0,10))],
 
             [sg.Text("", key='-OUTPUT-', pad=(0,10))],
@@ -97,11 +141,14 @@ while True:
         window['IDS'].update(values = items)
         window['-TXT-'].update(visible=True)
         window['-TXT2-'].update(visible=True)
+        # sg.popup('test', query[0].split(', ')[0])
   
-    if event == "Dodaj element":
-        window['-OUTPUT-'].update(value = " Dodaj element : ")
-        window['-TXT-'].update(visible=True)
-        window['-TXT2-'].update(visible=True)
+
+    if event == 'Dodaj film':
+        sg.popup('Film', funkcje.dodaj_film(conn, 3, values['tytulFilm'], values['gatunekFilm'], int(values['rokFilm'])))
+        # mylist = funkcje.terminInfo(conn)
+        # window['terminSzef'].update(funkcje.terminInfo(conn))
+        # window['termin'].update(funkcje.terminInfo(conn))
 
     if event == "Submit":
         window['-OUTPUT-'].update(value = " Nasza predykcja: ")
