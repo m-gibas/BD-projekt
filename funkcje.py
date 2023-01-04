@@ -9,3 +9,12 @@ def dodaj_film(conn, id_film, tytul, gatunek, rok):
     out = cur.fetchall()
     cur.close()
     return out
+
+
+def filmID(conn):
+    cur = conn.cursor()
+    cur.callproc('filmID')
+    # conn.commit()
+    out = cur.fetchone()
+    cur.close()
+    return out[0]

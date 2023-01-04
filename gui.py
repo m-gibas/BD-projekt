@@ -98,21 +98,34 @@ w, h = 640, 480
 
 sg.theme('DarkGreen3')   
 
+widokDodajFilm = [
+            [sg.Button("Dodaj film", pad=(8,10))],
+            sg.Text('Tytuł: '), sg.Input('', size=(16,2), key='tytulFilm'),
+            sg.Text('Gatunek: '), sg.Input('', size=(10,2), key='gatunekFilm'),
+            sg.Text('Rok wydania: '), sg.Input('', size=(4,2), key='rokFilm'),
+            ]
+
+widokDodajAktora = [
+            [sg.Button("Dodaj aktora:", pad=(8,10))],
+            sg.Text('Imię: '), sg.Input('', size=(10,2), key='imieAktor'),
+            sg.Text('Nazwisko: '), sg.Input('', size=(10,2), key='nazwiskoAktor'),
+            sg.Text('Data urodzenia: rok'), sg.Input('', size=(4,2), key='rokAktor'), sg.Text('miesiąc'), sg.Input('', size=(2,2), key='miesiacAktor'), sg.Text('dzień'), sg.Input('', size=(2,2), key='dzienAktor'),
+            ]
 
 layout = [  [sg.Column([[sg.Button('Wyjście' )]], element_justification='right', expand_x=True)],
+
+            widokDodajFilm,
+            widokDodajAktora,
+
             [sg.Button("Przeglądaj elementy", pad=(0,10))],
-            [sg.Button("Dodaj film", pad=(0,10))],
-            [sg.Text('Tytuł: '),sg.Input('', size=(8,2), key='tytulFilm')],
-            [sg.Text('Gatunek: '),sg.Input('', size=(8,2), key='gatunekFilm')],
-            [sg.Text('Rok wydania: '),sg.Input('', size=(8,2), key='rokFilm')],
 
             [sg.Button("Submit", pad=(0,10))],
-
+            
             [sg.Text("", key='-OUTPUT-', pad=(0,10))],
             [sg.Listbox(values="", size=(100, 5), key='_LISTBOX_')],
             [sg.Listbox(values="", size=(5, 10), pad=(0, 0), no_scrollbar=True, enable_events=True, key='IDS')],
-            [sg.Text(" Nasz obrazek:", key='-TXT-', size=(25, 2), pad=(0, 0), expand_x=True, expand_y=False, visible=False),
-            sg.Text(" Obraz przewidzianego pająka:", key='-TXT2-', size=(25, 2), pad=(0, 0), expand_x=True, expand_y=False, visible=False)],
+            # [sg.Text(" Nasz obrazek:", key='-TXT-', size=(25, 2), pad=(0, 0), expand_x=True, expand_y=False, visible=False),
+            # sg.Text(" Obraz przewidzianego pająka:", key='-TXT2-', size=(25, 2), pad=(0, 0), expand_x=True, expand_y=False, visible=False)],
             ]
 
 # sg.theme_background_color('#FF0000')
@@ -145,10 +158,9 @@ while True:
   
 
     if event == 'Dodaj film':
-        sg.popup('Film', funkcje.dodaj_film(conn, 3, values['tytulFilm'], values['gatunekFilm'], int(values['rokFilm'])))
-        # mylist = funkcje.terminInfo(conn)
-        # window['terminSzef'].update(funkcje.terminInfo(conn))
-        # window['termin'].update(funkcje.terminInfo(conn))
+        len = funkcje.filmID(conn)
+        # print(len)
+        sg.popup('Film', funkcje.dodaj_film(conn, len+1, values['tytulFilm'], values['gatunekFilm'], int(values['rokFilm'])))
 
     if event == "Submit":
         window['-OUTPUT-'].update(value = " Nasza predykcja: ")
