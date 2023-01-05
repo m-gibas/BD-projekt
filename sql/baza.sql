@@ -1,10 +1,10 @@
-SET search_path TO projekt;
+SET search_path to projekt;
 
 CREATE TABLE "aktor"(
     "id_aktor" BIGINT NOT NULL,
     "imie" VARCHAR(255) NOT NULL,
     "nazwisko" VARCHAR(255) NOT NULL,
-    "wiek" INTEGER NOT NULL
+    "data_urodzenia" DATE NOT NULL
 );
 ALTER TABLE
     "aktor" ADD PRIMARY KEY("id_aktor");
@@ -16,18 +16,21 @@ CREATE TABLE "film"(
 );
 ALTER TABLE
     "film" ADD PRIMARY KEY("id_film");
-CREATE TABLE "reżyser"(
+CREATE TABLE "rezyser"(
     "id_rezyser" BIGINT NOT NULL,
     "imie" VARCHAR(255) NOT NULL,
     "nazwisko" VARCHAR(255) NOT NULL,
-    "wiek" INTEGER NOT NULL
+    "data_urodzenia" DATE NOT NULL
 );
 ALTER TABLE
-    "reżyser" ADD PRIMARY KEY("id_rezyser");
+    "rezyser" ADD PRIMARY KEY("id_rezyser");
 CREATE TABLE "kino"(
     "id_kino" BIGINT NOT NULL,
-    "adres" VARCHAR(255) NOT NULL,
-    "nazwa" VARCHAR(255) NOT NULL
+    "nazwa" VARCHAR(255) NOT NULL,
+    "miasto" VARCHAR(255) NOT NULL,
+    "kod_pocztowy" VARCHAR(255) NOT NULL,
+    "ulica" VARCHAR(255) NOT NULL,
+    "numer_budynku" INTEGER NOT NULL
 );
 ALTER TABLE
     "kino" ADD PRIMARY KEY("id_kino");
