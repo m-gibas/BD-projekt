@@ -100,3 +100,29 @@ def dodaj_seans(conn, id_seans, id_kino, id_film, data, godzina):
     return out[0][0]
 
 
+# funkcje zwracające SELECTy
+
+def pokaz_aktorow(conn):
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM aktor')
+    wynik = cur.fetchall()
+    nazwy = [opis[0] for opis in cur.description]
+    cur.close()
+    return nazwy, wynik
+
+def pokaz_filmy(conn):
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM film')
+    wynik = cur.fetchall()
+    nazwy = [opis[0] for opis in cur.description]
+    cur.close()
+    return nazwy, wynik
+
+def pokaz_kina(conn):
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM kino')
+    wynik = cur.fetchall()
+    nazwy = [opis[0] for opis in cur.description]
+    cur.close()
+    return nazwy, wynik
+
