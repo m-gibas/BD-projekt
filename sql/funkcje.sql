@@ -109,7 +109,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
-CREATE OR REPLACE FUNCTION dodaj_aktor(id_aktor BIGINT, imie VARCHAR, nazwisko VARCHAR, data_urodzenia DATE)
+CREATE OR REPLACE FUNCTION dodaj_aktora(id_aktor BIGINT, imie VARCHAR, nazwisko VARCHAR, data_urodzenia DATE)
 RETURNS TEXT AS
 $$
 DECLARE
@@ -124,7 +124,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
-CREATE OR REPLACE FUNCTION dodaj_rezyser(id_rezyser BIGINT, imie VARCHAR, nazwisko VARCHAR, data_urodzenia DATE)
+CREATE OR REPLACE FUNCTION dodaj_rezysera(id_rezyser BIGINT, imie VARCHAR, nazwisko VARCHAR, data_urodzenia DATE)
 RETURNS TEXT AS
 $$
 DECLARE
