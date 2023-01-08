@@ -24,6 +24,7 @@ widokDodajKino = [[
 
 widokDodajFilm = [[
             sg.Button("Dodaj", pad=(8,10), key='dodajFilm'),
+            sg.Text('ID reżysera: '), sg.Input('', size=(3,2), key='idRezyserFilm'),
             sg.Text('Tytuł: '), sg.Input('', size=(16,2), key='tytulFilm'),
             sg.Text('Gatunek: '), sg.Input('', size=(10,2), key='gatunekFilm'),
             sg.Text('Rok wydania: '), sg.Input('', size=(4,2), key='rokFilm'),
@@ -82,11 +83,17 @@ layout = [  [sg.Column([[sg.Button('Wyjście' )]], element_justification='right'
             [sg.Frame('Dodaj aktora', widokDodajAktora, title_color='chocolate2', border_width=5)],
             [sg.Frame('Dodaj reżysera', widokDodajRezysera, title_color='chocolate2', border_width=5)],
             [sg.Frame('Przypisz aktora do filmu', widokDodajAktoraDoFilmu, title_color='chocolate2', border_width=5),
-            sg.Button("Pokaż aktorów", pad=(10,0), key='pokaz_aktorow'),
-            sg.Button("Pokaż filmy", pad=(10,0), key='pokaz_filmy'),
             sg.Button("Pokaż kina", pad=(10,0), key='pokaz_kina'),
+            sg.Button("Pokaż seanse", pad=(10,0), key='pokaz_seanse'),
+            sg.Button("Pokaż filmy", pad=(10,0), key='pokaz_filmy'),
+            sg.Button("Pokaż aktorów", pad=(10,0), key='pokaz_aktorow'),
+            sg.Button("Pokaż reżyserów", pad=(10,0), key='pokaz_rezyserow'),
             ],
             [sg.Frame('Przypisz seans do kina', widokDodajSeans, title_color='chocolate2', border_width=5)],
+            [sg.Button("Pokaż aktorów filmów", pad=(10,20), key='pokaz_aktorzyFilmu'),
+            sg.Button("Pokaż filmy reżyserów", pad=(10,0), key='pokaz_filmyRezysera'),
+            sg.Button("Pokaż seanse kin", pad=(10,0), key='pokaz_seanseKina'),
+            ]
 
             
             # [sg.Text("", key='-OUTPUT-', pad=(0,10))],
@@ -115,7 +122,7 @@ while True:
         len = funkcje.filmID(conn)
         if(len == None): len = 0
         # print(len)
-        sg.popup('Film', funkcje.dodaj_film(conn, len+1, values['tytulFilm'], values['gatunekFilm'], int(values['rokFilm'])))
+        sg.popup('Film', funkcje.dodaj_film(conn, len+1, values['idRezyserFilm'], values['tytulFilm'], values['gatunekFilm'], int(values['rokFilm'])))
 
     if event == 'dodajAktora':
         len = funkcje.aktorID(conn)
@@ -138,19 +145,43 @@ while True:
         sg.popup('Seans', funkcje.dodaj_seans(conn, len+1, int(values['idKinoSeans']), int(values['idFilmSeans']), values['dataSeans'], values['godzinaSeans']))
    
 
-# funkcje pokazywania 
+# funkcje pokazywania tabel
 
-    if event == "pokaz_aktorow":
-        nazwy, wartosci = funkcje.pokaz_aktorow(conn)
+    if event == "pokaz_kina":
+        nazwy, wartosci = funkcje.pokaz_kina(conn)
+        otworz_liste(nazwy, wartosci)
+
+    if event == "pokaz_seanse":
+        nazwy, wartosci = funkcje.pokaz_seanse(conn)
         otworz_liste(nazwy, wartosci)
 
     if event == "pokaz_filmy":
         nazwy, wartosci = funkcje.pokaz_filmy(conn)
         otworz_liste(nazwy, wartosci)
 
-    if event == "pokaz_kina":
-        nazwy, wartosci = funkcje.pokaz_kina(conn)
+    if event == "pokaz_aktorow":
+        nazwy, wartosci = funkcje.pokaz_aktorow(conn)
         otworz_liste(nazwy, wartosci)
+
+    if event == "pokaz_rezyserow":
+        nazwy, wartosci = funkcje.pokaz_rezyserow(conn)
+        otworz_liste(nazwy, wartosci)
+
+# funkcje wyświetlania widoków
+
+    if event == "pokaz_aktorzyFilmu":
+        nazwy, wartosci = funkcje.pokaz_aktorzyFilmu(conn)
+        otworz_liste(nazwy, wartosci)
+
+    if event == "pokaz_filmyRezysera":
+        nazwy, wartosci = funkcje.pokaz_filmyRezysera(conn)
+        otworz_liste(nazwy, wartosci)
+
+    if event == "pokaz_seanseKina":
+        nazwy, wartosci = funkcje.pokaz_seanseKina(conn)
+        otworz_liste(nazwy, wartosci)
+
+    
 
 
 

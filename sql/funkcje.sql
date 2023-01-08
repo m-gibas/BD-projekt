@@ -79,15 +79,15 @@ LANGUAGE 'plpgsql';
 
 -- funkcje dodawania rekordów
 
-CREATE OR REPLACE FUNCTION dodaj_film(id_film BIGINT, tytul VARCHAR, gatunek VARCHAR, rok INTEGER)
+CREATE OR REPLACE FUNCTION dodaj_film(id_film BIGINT, id_rezyser BIGINT, tytul VARCHAR, gatunek VARCHAR, rok INTEGER)
 RETURNS TEXT AS
 $$
 DECLARE
     wynik TEXT;
 BEGIN
-    INSERT INTO film(id_film, tytul, gatunek, rok) 
-    VALUES(id_film, tytul, gatunek, rok);
-    wynik := 'Dodano film o parametrach: id=' || id_film || ', tytuł=' || tytul || ', gatunek=' || gatunek || ', rok=' || rok;
+    INSERT INTO film(id_film, id_rezyser, tytul, gatunek, rok) 
+    VALUES(id_film, id_rezyser, tytul, gatunek, rok);
+    wynik := 'Dodano film o parametrach: id=' || id_film || ', id reżysera=' || id_rezyser || ', tytuł=' || tytul || ', gatunek=' || gatunek || ', rok=' || rok;
     RETURN wynik;
 END;
 $$
@@ -167,3 +167,35 @@ BEGIN
 END;
 $$
 LANGUAGE 'plpgsql';
+
+
+-- widoki
+
+-- DROP VIEW aktorzyFilmu
+CREATE OR REPLACE VIEW aktorzyFilmu 
+AS
+SELECT f.tytul AS "Tytuł filmu", a.imie AS "Imię aktora", a.nazwisko AS "Nazwisko aktora", a.data_urodzenia AS "Data urodzenia"  FROM aktor_film af
+JOIN film f USING (id_film)
+JOIN aktor a USING (id_aktor)
+WHERE f.id_film = af.id_film
+ORDER BY 1, 3, 2;
+-- SELECT * FROM aktorzyFilmu;
+
+
+CREATE OR REPLACE VIEW filmyRezysera 
+AS
+SELECT r.imie AS "Imię reżysera", r.nazwisko AS "Nazwisko reżysera", r.data_urodzenia AS "Data urodzenia", f.tytul AS "Tytuł filmu" FROM film f
+JOIN rezyser r USING (id_rezyser)
+WHERE f.id_rezyser = r.id_rezyser
+ORDER BY 2, 1, 4;
+-- SELECT * FROM filmyRezysera;
+
+
+CREATE OR REPLACE VIEW seanseKina 
+AS
+SELECT f.tytul "Tytuł filmu", (s.data + s.godzina) AS "Data wydarzenia", k.nazwa AS "Nazwa kina" FROM seans s
+JOIN film f USING (id_film)
+JOIN kino k USING (id_kino)
+WHERE f.id_film = s.id_film AND k.id_kino = s.id_kino
+ORDER BY 1, 2, 3;
+-- SELECT * FROM seanseKina;

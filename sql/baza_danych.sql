@@ -10,6 +10,7 @@ ALTER TABLE
     "aktor" ADD PRIMARY KEY("id_aktor");
 CREATE TABLE "film"(
     "id_film" BIGINT NOT NULL,
+    "id_rezyser" BIGINT NOT NULL,
     "tytul" VARCHAR(255) NOT NULL,
     "gatunek" VARCHAR(255) NOT NULL,
     "rok" INTEGER NOT NULL
@@ -56,5 +57,7 @@ ALTER TABLE
     "aktor_film" ADD CONSTRAINT "aktor_film_id_film_foreign" FOREIGN KEY("id_film") REFERENCES "film"("id_film");
 ALTER TABLE
     "seans" ADD CONSTRAINT "seans_id_film_foreign" FOREIGN KEY("id_film") REFERENCES "film"("id_film");
+ALTER TABLE
+    "film" ADD CONSTRAINT "film_id_rezyser_foreign" FOREIGN KEY("id_rezyser") REFERENCES "rezyser"("id_rezyser");
 ALTER TABLE
     "seans" ADD CONSTRAINT "seans_id_kino_foreign" FOREIGN KEY("id_kino") REFERENCES "kino"("id_kino");

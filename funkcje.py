@@ -1,5 +1,3 @@
-import psycopg2
-
 # funkcje długości
 
 def filmID(conn):
@@ -55,9 +53,9 @@ def dodaj_kino(conn, id_kino, nazwa, miasto, kod_pocztowy, ulica, numer_budynku)
     return out[0][0]
 
 
-def dodaj_film(conn, id_film, tytul, gatunek, rok):
+def dodaj_film(conn, id_film, id_rezyser, tytul, gatunek, rok):
     cur = conn.cursor()
-    cur.callproc('dodaj_film', (id_film, tytul, gatunek, rok) )
+    cur.callproc('dodaj_film', (id_film, id_rezyser, tytul, gatunek, rok) )
     conn.commit()
     out = cur.fetchall()
     cur.close()
@@ -102,9 +100,17 @@ def dodaj_seans(conn, id_seans, id_kino, id_film, data, godzina):
 
 # funkcje zwracające SELECTy
 
-def pokaz_aktorow(conn):
+def pokaz_kina(conn):
     cur = conn.cursor()
-    cur.execute('SELECT * FROM aktor')
+    cur.execute('SELECT * FROM kino')
+    wynik = cur.fetchall()
+    nazwy = [opis[0] for opis in cur.description]
+    cur.close()
+    return nazwy, wynik
+
+def pokaz_seanse(conn):
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM seans')
     wynik = cur.fetchall()
     nazwy = [opis[0] for opis in cur.description]
     cur.close()
@@ -118,11 +124,44 @@ def pokaz_filmy(conn):
     cur.close()
     return nazwy, wynik
 
-def pokaz_kina(conn):
+def pokaz_aktorow(conn):
     cur = conn.cursor()
-    cur.execute('SELECT * FROM kino')
+    cur.execute('SELECT * FROM aktor')
     wynik = cur.fetchall()
     nazwy = [opis[0] for opis in cur.description]
     cur.close()
     return nazwy, wynik
 
+def pokaz_rezyserow(conn):
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM rezyser')
+    wynik = cur.fetchall()
+    nazwy = [opis[0] for opis in cur.description]
+    cur.close()
+    return nazwy, wynik
+
+# funkcje widoków
+
+def pokaz_aktorzyFilmu(conn):
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM aktorzyFilmu')
+    wynik = cur.fetchall()
+    nazwy = [opis[0] for opis in cur.description]
+    cur.close()
+    return nazwy, wynik
+
+def pokaz_filmyRezysera(conn):
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM filmyRezysera')
+    wynik = cur.fetchall()
+    nazwy = [opis[0] for opis in cur.description]
+    cur.close()
+    return nazwy, wynik
+
+def pokaz_seanseKina(conn):
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM seanseKina')
+    wynik = cur.fetchall()
+    nazwy = [opis[0] for opis in cur.description]
+    cur.close()
+    return nazwy, wynik
