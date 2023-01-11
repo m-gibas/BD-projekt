@@ -268,4 +268,48 @@ GROUP BY 1
 ORDER BY 1, 2;
 
 
+--
 
+CREATE OR REPLACE FUNCTION sprawdz_date()
+RETURNS TRIGGER AS
+$$
+BEGIN
+    IF NEW.data_urodzenia > CURRENT_TIMESTAMP THEN
+        RAISE EXCEPTION 'Data urodzenia nie może być później niż aktualny czas!';
+        RETURN NULL;
+    ELSE
+        RETURN NEW;
+    END IF;
+END;
+$$
+LANGUAGE 'plpgsql';  
+
+CREATE TRIGGER sprawdz_date_aktora
+BEFORE INSERT OR UPDATE OF data_urodzenia ON aktor
+FOR EACH ROW
+EXECUTE FUNCTION sprawdz_date();
+
+CREATE TRIGGER sprawdz_date_rezysera
+BEFORE INSERT OR UPDATE OF data_urodzenia ON rezyser
+FOR EACH ROW
+EXECUTE FUNCTION sprawdz_date();
+
+
+CREATE OR REPLACE FUNCTION sprawdz_date_seans()
+RETURNS TRIGGER AS
+$$
+BEGIN
+    IF NEW.data < CURRENT_TIMESTAMP THEN
+        RAISE EXCEPTION 'Wydarzenie nie może się odbyć w przeszłości!';
+        RETURN NULL;
+    ELSE
+        RETURN NEW;
+    END IF;
+END;
+$$
+LANGUAGE 'plpgsql';  
+
+CREATE TRIGGER sprawdz_date_seansu
+BEFORE INSERT OR UPDATE OF data ON seans
+FOR EACH ROW
+EXECUTE FUNCTION sprawdz_date_seans();
