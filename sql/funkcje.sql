@@ -200,7 +200,7 @@ LANGUAGE 'plpgsql';
 -- DROP VIEW aktorzyFilmu
 CREATE OR REPLACE VIEW aktorzyFilmu 
 AS
-SELECT f.tytul AS "Tytuł filmu", a.imie AS "Imię aktora", a.nazwisko AS "Nazwisko aktora", a.data_urodzenia AS "Data urodzenia"  FROM aktor_film af
+SELECT f.tytul AS "Tytuł filmu", a.imie AS "Imię aktora", a.nazwisko AS "Nazwisko aktora", a.data_urodzenia AS "Data urodzenia", date_part('year', age(a.data_urodzenia))::int AS "Wiek"  FROM aktor_film af
 JOIN film f USING (id_film)
 JOIN aktor a USING (id_aktor)
 WHERE f.id_film = af.id_film
@@ -210,10 +210,10 @@ ORDER BY 1, 3, 2;
 
 CREATE OR REPLACE VIEW filmyRezysera 
 AS
-SELECT r.imie AS "Imię reżysera", r.nazwisko AS "Nazwisko reżysera", r.data_urodzenia AS "Data urodzenia", f.tytul AS "Tytuł filmu" FROM film f
+SELECT r.imie AS "Imię reżysera", r.nazwisko AS "Nazwisko reżysera", r.data_urodzenia AS "Data urodzenia", date_part('year', age(r.data_urodzenia))::int AS "wiek", f.tytul AS "Tytuł filmu" FROM film f
 JOIN rezyser r USING (id_rezyser)
 WHERE f.id_rezyser = r.id_rezyser
-ORDER BY 2, 1, 4;
+ORDER BY 2, 1, 5;
 -- SELECT * FROM filmyRezysera;
 
 
@@ -245,4 +245,27 @@ $$
 LANGUAGE 'plpgsql';
 
 -- SELECT * FROM logowanie('admin', 'admin');
+
+
+-- funckje zliczania ilości
+
+CREATE OR REPLACE VIEW iloscFilmowRezysera 
+AS
+SELECT "Imię reżysera", "Nazwisko reżysera", COUNT(*) AS "Ilość filmów" FROM filmyRezysera
+GROUP BY 2, 1
+ORDER BY 2, 1, 3;
+
+CREATE OR REPLACE VIEW iloscAktorowFilmu 
+AS
+SELECT "Tytuł filmu", COUNT(*) AS "Ilość aktorów" FROM aktorzyFilmu
+GROUP BY 1
+ORDER BY 1, 2;
+
+CREATE OR REPLACE VIEW iloscSeansowKina
+AS
+SELECT "Nazwa kina", COUNT(*) AS "Ilość seansów" FROM seanseKina
+GROUP BY 1
+ORDER BY 1, 2;
+
+
 

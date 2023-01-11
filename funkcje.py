@@ -182,6 +182,30 @@ def pokaz_seanseKina(conn):
     cur.close()
     return nazwy, wynik
 
+def pokaz_iloscFilmowRezysera(conn):
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM iloscFilmowRezysera')
+    wynik = cur.fetchall()
+    nazwy = [opis[0] for opis in cur.description]
+    cur.close()
+    return nazwy, wynik
+
+def pokaz_iloscAktorowFilmu(conn):
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM iloscAktorowFilmu')
+    wynik = cur.fetchall()
+    nazwy = [opis[0] for opis in cur.description]
+    cur.close()
+    return nazwy, wynik
+
+def pokaz_iloscSeansowKina(conn):
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM iloscSeansowKina')
+    wynik = cur.fetchall()
+    nazwy = [opis[0] for opis in cur.description]
+    cur.close()
+    return nazwy, wynik
+
 # logowanie
 
 def logowanie(conn, login, haslo):

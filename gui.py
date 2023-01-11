@@ -82,6 +82,18 @@ def otworz_liste(nazwy, wartosci):
             break
     window.close()
 
+def otworz_liste2(arr):
+    layout = [
+        [sg.Table(values=arr[1], headings=arr[0], key='lista')],
+        [sg.Table(values=arr[3], headings=arr[2], key='lista')],
+        ]
+    window = sg.Window("Lista", layout, modal=True)
+    while True:
+        event, values = window.read()
+        if event == "Wyjście" or event == sg.WIN_CLOSED:
+            break
+    window.close()
+
 def otworz_okno(layout):
     window = sg.Window("Okno", layout, modal=True)
     while True:
@@ -104,10 +116,13 @@ layout = [  [sg.Column([[sg.Button('Wyjście' )]], element_justification='right'
             sg.Button("Pokaż reżyserów", pad=(10,0), key='pokaz_rezyserow'),
             ],
             [sg.Frame('Przypisz seans do kina', widokDodajSeans, title_color='chocolate2', border_width=5)],
-            [sg.Button("Pokaż aktorów filmów", pad=(10,20), key='pokaz_aktorzyFilmu'),
-            sg.Button("Pokaż filmy reżyserów", pad=(10,0), key='pokaz_filmyRezysera'),
-            sg.Button("Pokaż seanse kin", pad=(10,0), key='pokaz_seanseKina'),
-            ],
+            [sg.Frame('Raporty', 
+                [[sg.Button("Pokaż aktorów filmów", pad=(10,20), key='pokaz_aktorzyFilmu'),
+                sg.Button("Pokaż filmy reżyserów", pad=(10,0), key='pokaz_filmyRezysera'),
+                sg.Button("Pokaż seanse kin", pad=(10,0), key='pokaz_seanseKina'),
+                ]],
+            pad=(10,10) ,title_color='chocolate2', border_width=5)],
+            
             
             
             # [sg.Text("", key='-OUTPUT-', pad=(0,10))],
@@ -189,15 +204,18 @@ def glowne_okno():
 
         if event == "pokaz_aktorzyFilmu":
             nazwy, wartosci = funkcje.pokaz_aktorzyFilmu(conn)
-            otworz_liste(nazwy, wartosci)
+            nazwy2, wartosci2 = funkcje.pokaz_iloscAktorowFilmu(conn)
+            otworz_liste2([nazwy, wartosci, nazwy2, wartosci2])
 
         if event == "pokaz_filmyRezysera":
             nazwy, wartosci = funkcje.pokaz_filmyRezysera(conn)
-            otworz_liste(nazwy, wartosci)
+            nazwy2, wartosci2 = funkcje.pokaz_iloscFilmowRezysera(conn)
+            otworz_liste2([nazwy, wartosci, nazwy2, wartosci2])
 
         if event == "pokaz_seanseKina":
             nazwy, wartosci = funkcje.pokaz_seanseKina(conn)
-            otworz_liste(nazwy, wartosci)
+            nazwy2, wartosci2 = funkcje.pokaz_iloscSeansowKina(conn)
+            otworz_liste2([nazwy, wartosci, nazwy2, wartosci2])
 
 
 
@@ -219,5 +237,5 @@ while True:
 
     if event == "logowanie":
         if funkcje.logowanie(conn, values['login'], values['haslo']) != None:
-            glowne_okno()
             window.close()
+            glowne_okno()
