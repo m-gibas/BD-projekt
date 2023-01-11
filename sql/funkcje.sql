@@ -1,4 +1,4 @@
--- SET search_path to projekt;
+SET search_path to projekt;
 
 
 -- funkcje zwaracania długości (ostatnie ID)
@@ -75,6 +75,17 @@ $$
 LANGUAGE 'plpgsql'; 
 -- SELECT * FROM seansID()
 
+CREATE OR REPLACE FUNCTION uzytkownikID()
+RETURNS INTEGER AS
+$$
+BEGIN
+    RETURN (SELECT id FROM uzytkownik 
+    ORDER BY uzytkownik DESC 
+    LIMIT 1);
+END;
+$$
+LANGUAGE 'plpgsql'; 
+-- SELECT * FROM seansID()
 
 
 -- funkcje dodawania rekordów
@@ -169,6 +180,21 @@ $$
 LANGUAGE 'plpgsql';
 
 
+CREATE OR REPLACE FUNCTION dodaj_uzytkownika(id BIGINT, login VARCHAR, haslo VARCHAR)
+RETURNS TEXT AS
+$$
+DECLARE
+    wynik TEXT;
+BEGIN
+    INSERT INTO uzytkownik(id, login, haslo) 
+    VALUES(id, login, haslo) ;
+    wynik := 'Dodano użytkownika o parametrach: id=' || id || ', login=' || login;
+    RETURN wynik;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+
 -- widoki
 
 -- DROP VIEW aktorzyFilmu
@@ -199,3 +225,24 @@ JOIN kino k USING (id_kino)
 WHERE f.id_film = s.id_film AND k.id_kino = s.id_kino
 ORDER BY 1, 2, 3;
 -- SELECT * FROM seanseKina;
+
+
+-- funkcja logowania
+
+CREATE OR REPLACE FUNCTION logowanie(login2 VARCHAR, haslo2 VARCHAR)
+RETURNS TEXT AS
+$$
+DECLARE
+    wynik INTEGER;
+BEGIN
+    wynik := (
+		SELECT id FROM uzytkownik u
+		WHERE haslo LIKE haslo2 AND login LIKE login2
+	);
+    RETURN wynik;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+-- SELECT * FROM logowanie('admin', 'admin');
+

@@ -42,6 +42,13 @@ def seansID(conn):
     cur.close()
     return out[0]
 
+def uzytkownikID(conn):
+    cur = conn.cursor()
+    cur.callproc('uzytkownikID')
+    out = cur.fetchone()
+    cur.close()
+    return out[0]
+
 # funkcje dodawania
 
 def dodaj_kino(conn, id_kino, nazwa, miasto, kod_pocztowy, ulica, numer_budynku):
@@ -92,6 +99,15 @@ def dodaj_aktorFilm(conn, id, id_aktor, id_film):
 def dodaj_seans(conn, id_seans, id_kino, id_film, data, godzina):
     cur = conn.cursor()
     cur.callproc('dodaj_seans', (id_seans, id_kino, id_film, data, godzina) )
+    conn.commit()
+    out = cur.fetchall()
+    cur.close()
+    return out[0][0]
+
+
+def dodaj_uzytkownika(conn, id, login, haslo):
+    cur = conn.cursor()
+    cur.callproc('dodaj_uzytkownika', (id, login, haslo) )
     conn.commit()
     out = cur.fetchall()
     cur.close()
@@ -165,3 +181,12 @@ def pokaz_seanseKina(conn):
     nazwy = [opis[0] for opis in cur.description]
     cur.close()
     return nazwy, wynik
+
+# logowanie
+
+def logowanie(conn, login, haslo):
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM logowanie(\'' + login + '\',\'' + haslo +'\')' )
+    wynik = cur.fetchone()
+    cur.close()
+    return wynik[0]

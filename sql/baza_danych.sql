@@ -1,4 +1,4 @@
-SET search_path to projekt;
+SET search_path TO projekt;
 
 CREATE TABLE "aktor"(
     "id_aktor" BIGINT NOT NULL,
@@ -51,6 +51,13 @@ CREATE TABLE "aktor_film"(
 );
 ALTER TABLE
     "aktor_film" ADD PRIMARY KEY("id");
+CREATE TABLE "uzytkownik"(
+    "id" BIGINT NOT NULL,
+    "login" VARCHAR(255) NOT NULL,
+    "haslo" VARCHAR(255) NOT NULL
+);
+ALTER TABLE
+    "uzytkownik" ADD PRIMARY KEY("id");
 ALTER TABLE
     "aktor_film" ADD CONSTRAINT "aktor_film_id_aktor_foreign" FOREIGN KEY("id_aktor") REFERENCES "aktor"("id_aktor");
 ALTER TABLE

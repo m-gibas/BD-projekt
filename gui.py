@@ -12,6 +12,12 @@ if __name__ == '__main__':
 w, h = 640, 480
 sg.theme('DarkGreen3')   
 
+widokLogowanie = [[
+            [sg.Text('Login: '), sg.Input('', size=(12,2), pad=(10,10), key='login'),
+            sg.Text('Hasło: '), sg.Input('', size=(12,2), key='haslo'),],
+            [sg.Button("Logowanie", pad=(8,10), key='logowanie'),
+            sg.Button("Rejestracja", pad=(8,10), key='rejestracja'),]
+            ]]
             
 widokDodajKino = [[
             sg.Button("Dodaj", pad=(8,10), key='dodajKino'),
@@ -72,7 +78,15 @@ def otworz_liste(nazwy, wartosci):
     window = sg.Window("Lista", layout, modal=True)
     while True:
         event, values = window.read()
-        if event == "Exit" or event == sg.WIN_CLOSED:
+        if event == "Wyjście" or event == sg.WIN_CLOSED:
+            break
+    window.close()
+
+def otworz_okno(layout):
+    window = sg.Window("Okno", layout, modal=True)
+    while True:
+        event, values = window.read()
+        if event == "Wyjście" or event == sg.WIN_CLOSED:
             break
     window.close()
 
@@ -93,8 +107,8 @@ layout = [  [sg.Column([[sg.Button('Wyjście' )]], element_justification='right'
             [sg.Button("Pokaż aktorów filmów", pad=(10,20), key='pokaz_aktorzyFilmu'),
             sg.Button("Pokaż filmy reżyserów", pad=(10,0), key='pokaz_filmyRezysera'),
             sg.Button("Pokaż seanse kin", pad=(10,0), key='pokaz_seanseKina'),
-            ]
-
+            ],
+            
             
             # [sg.Text("", key='-OUTPUT-', pad=(0,10))],
             # [sg.Listbox(values="", size=(100, 5), key='_LISTBOX_', background_color='red')],
@@ -105,85 +119,105 @@ layout = [  [sg.Column([[sg.Button('Wyjście' )]], element_justification='right'
 
 
 
-window = sg.Window('Kino', layout, size=(1000, 700), finalize=True)
-while True:
-    event, values = window.read()
-    if event == sg.WIN_CLOSED or event == 'Wyjście':
-        break
 
-# funkcje dodawania elementów
 
-    if event == 'dodajKino':
-        len = funkcje.kinoID(conn)
-        if(len == None): len = 0
-        sg.popup('Kino', funkcje.dodaj_kino(conn, len+1, values['nazwaKino'], values['miastoKino'],  values['kodKino'],  values['ulicaKino'], int(values['numerKino'])))
-   
-    if event == 'dodajFilm':
-        len = funkcje.filmID(conn)
-        if(len == None): len = 0
-        # print(len)
-        sg.popup('Film', funkcje.dodaj_film(conn, len+1, values['idRezyserFilm'], values['tytulFilm'], values['gatunekFilm'], int(values['rokFilm'])))
+def glowne_okno():
+    window = sg.Window('Kino', layout, size=(1000, 700), finalize=True)
+    while True:
+        event, values = window.read()
+        if event == sg.WIN_CLOSED or event == 'Wyjście':
+            break
 
-    if event == 'dodajAktora':
-        len = funkcje.aktorID(conn)
-        if(len == None): len = 0
-        sg.popup('Aktor', funkcje.dodaj_aktora(conn, len+1, values['imieAktor'],  values['nazwiskoAktor'], values['dataAktor']))
-   
-    if event == 'dodajRezysera':
-        len = funkcje.rezyserID(conn)
-        if(len == None): len = 0
-        sg.popup('Rezyser', funkcje.dodaj_rezysera(conn, len+1, values['imieRezyser'],  values['nazwiskoRezyser'], values['dataRezyser'] ))
-   
-    if event == 'dodajAktoraDoFilmu':
-        len = funkcje.aktorFilmID(conn)
-        if(len == None): len = 0
-        sg.popup('Aktor do filmu', funkcje.dodaj_aktorFilm(conn, len+1, int(values['idAktor']), int(values['idFilm']) ))
-   
-    if event == 'dodajSeans':
-        len = funkcje.seansID(conn)
-        if(len == None): len = 0
-        sg.popup('Seans', funkcje.dodaj_seans(conn, len+1, int(values['idKinoSeans']), int(values['idFilmSeans']), values['dataSeans'], values['godzinaSeans']))
-   
+    # funkcje dodawania elementów
 
-# funkcje pokazywania tabel
+        if event == 'dodajKino':
+            len = funkcje.kinoID(conn)
+            if(len == None): len = 0
+            sg.popup('Kino', funkcje.dodaj_kino(conn, len+1, values['nazwaKino'], values['miastoKino'],  values['kodKino'],  values['ulicaKino'], int(values['numerKino'])))
+    
+        if event == 'dodajFilm':
+            len = funkcje.filmID(conn)
+            if(len == None): len = 0
+            # print(len)
+            sg.popup('Film', funkcje.dodaj_film(conn, len+1, values['idRezyserFilm'], values['tytulFilm'], values['gatunekFilm'], int(values['rokFilm'])))
 
-    if event == "pokaz_kina":
-        nazwy, wartosci = funkcje.pokaz_kina(conn)
-        otworz_liste(nazwy, wartosci)
-
-    if event == "pokaz_seanse":
-        nazwy, wartosci = funkcje.pokaz_seanse(conn)
-        otworz_liste(nazwy, wartosci)
-
-    if event == "pokaz_filmy":
-        nazwy, wartosci = funkcje.pokaz_filmy(conn)
-        otworz_liste(nazwy, wartosci)
-
-    if event == "pokaz_aktorow":
-        nazwy, wartosci = funkcje.pokaz_aktorow(conn)
-        otworz_liste(nazwy, wartosci)
-
-    if event == "pokaz_rezyserow":
-        nazwy, wartosci = funkcje.pokaz_rezyserow(conn)
-        otworz_liste(nazwy, wartosci)
-
-# funkcje wyświetlania widoków
-
-    if event == "pokaz_aktorzyFilmu":
-        nazwy, wartosci = funkcje.pokaz_aktorzyFilmu(conn)
-        otworz_liste(nazwy, wartosci)
-
-    if event == "pokaz_filmyRezysera":
-        nazwy, wartosci = funkcje.pokaz_filmyRezysera(conn)
-        otworz_liste(nazwy, wartosci)
-
-    if event == "pokaz_seanseKina":
-        nazwy, wartosci = funkcje.pokaz_seanseKina(conn)
-        otworz_liste(nazwy, wartosci)
-
+        if event == 'dodajAktora':
+            len = funkcje.aktorID(conn)
+            if(len == None): len = 0
+            sg.popup('Aktor', funkcje.dodaj_aktora(conn, len+1, values['imieAktor'],  values['nazwiskoAktor'], values['dataAktor']))
+    
+        if event == 'dodajRezysera':
+            len = funkcje.rezyserID(conn)
+            if(len == None): len = 0
+            sg.popup('Rezyser', funkcje.dodaj_rezysera(conn, len+1, values['imieRezyser'],  values['nazwiskoRezyser'], values['dataRezyser'] ))
+    
+        if event == 'dodajAktoraDoFilmu':
+            len = funkcje.aktorFilmID(conn)
+            if(len == None): len = 0
+            sg.popup('Aktor do filmu', funkcje.dodaj_aktorFilm(conn, len+1, int(values['idAktor']), int(values['idFilm']) ))
+    
+        if event == 'dodajSeans':
+            len = funkcje.seansID(conn)
+            if(len == None): len = 0
+            sg.popup('Seans', funkcje.dodaj_seans(conn, len+1, int(values['idKinoSeans']), int(values['idFilmSeans']), values['dataSeans'], values['godzinaSeans']))
     
 
+    # funkcje pokazywania tabel
+
+        if event == "pokaz_kina":
+            nazwy, wartosci = funkcje.pokaz_kina(conn)
+            otworz_liste(nazwy, wartosci)
 
 
-window.close()
-disconnect(conn)
+        if event == "pokaz_seanse":
+            nazwy, wartosci = funkcje.pokaz_seanse(conn)
+            otworz_liste(nazwy, wartosci)
+
+        if event == "pokaz_filmy":
+            nazwy, wartosci = funkcje.pokaz_filmy(conn)
+            otworz_liste(nazwy, wartosci)
+
+        if event == "pokaz_aktorow":
+            nazwy, wartosci = funkcje.pokaz_aktorow(conn)
+            otworz_liste(nazwy, wartosci)
+
+        if event == "pokaz_rezyserow":
+            nazwy, wartosci = funkcje.pokaz_rezyserow(conn)
+            otworz_liste(nazwy, wartosci)
+
+    # funkcje wyświetlania widoków
+
+        if event == "pokaz_aktorzyFilmu":
+            nazwy, wartosci = funkcje.pokaz_aktorzyFilmu(conn)
+            otworz_liste(nazwy, wartosci)
+
+        if event == "pokaz_filmyRezysera":
+            nazwy, wartosci = funkcje.pokaz_filmyRezysera(conn)
+            otworz_liste(nazwy, wartosci)
+
+        if event == "pokaz_seanseKina":
+            nazwy, wartosci = funkcje.pokaz_seanseKina(conn)
+            otworz_liste(nazwy, wartosci)
+
+
+
+
+    window.close()
+    disconnect(conn)
+
+
+window = sg.Window("Logowanie", widokLogowanie, modal=True)
+while True:
+    event, values = window.read()
+    if event == "Wyjście" or event == sg.WIN_CLOSED:
+        break
+
+    if event == "rejestracja":
+        len = funkcje.uzytkownikID(conn)
+        if(len == None): len = 0
+        sg.popup('Użytkownik', funkcje.dodaj_uzytkownika(conn, len+1, values['login'], values['haslo']))
+
+    if event == "logowanie":
+        if funkcje.logowanie(conn, values['login'], values['haslo']) != None:
+            glowne_okno()
+            window.close()

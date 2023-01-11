@@ -7,3 +7,14 @@ i ew dodać jakąś tabelę żeby można było więcej akcji wykonać później 
 
 
 OpenAI pomaga w insertach i przy pisaniu tego gówna
+
+
+
+dodać Frame'a albo coś na raporty z podpisem "raporty" i ewentualnie na dole pod raportem dodać jakis tekst
+
+dodać kolumnę wieku (wyliczonego z daty) w raportach np
+i sumę jakąś albo coś
+
+
++ dodać jakieś proste logowanie, po prostu żeby sprawdzało jeśli login taki to czy hasło się zgadza albo cos takiego
+dodać nową tabelę użytkownika, nie połączoną z resztą
