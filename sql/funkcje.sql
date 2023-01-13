@@ -96,6 +96,15 @@ $$
 DECLARE
     wynik TEXT;
 BEGIN
+    IF rok < 1895 THEN
+        RAISE EXCEPTION 'Przed 1895r nie było filmów!';
+    END IF;
+    IF tytul !~* '[a-z0-9]' THEN
+        RAISE EXCEPTION 'Tytuł musi zawierać jakieś znaki!';
+    END IF;
+    IF gatunek !~* '[a-z]' THEN
+        RAISE EXCEPTION 'Gatunek musi zawierać jakieś znaki i zaczynać się od litery!';
+    END IF;
     INSERT INTO film(id_film, id_rezyser, tytul, gatunek, rok) 
     VALUES(id_film, id_rezyser, tytul, gatunek, rok);
     wynik := 'Dodano film o parametrach: id=' || id_film || ', id reżysera=' || id_rezyser || ', tytuł=' || tytul || ', gatunek=' || gatunek || ', rok=' || rok;
@@ -111,6 +120,19 @@ $$
 DECLARE
     wynik TEXT;
 BEGIN
+    IF nazwa !~* '[a-z]' THEN
+        RAISE EXCEPTION 'Nazwa musi zawierać jakieś znaki i zaczynać się od litery!';
+    END IF;
+    IF miasto !~* '[a-z]' THEN
+        RAISE EXCEPTION 'Miasto musi zawierać jakieś znaki i zaczynać się od litery!';
+    END IF;
+    IF ulica !~* '[a-z0-9]' THEN
+        RAISE EXCEPTION 'Ulica musi zawierać jakieś znaki!';
+    END IF;
+    IF kod_pocztowy !~* '[0-9]' THEN
+        RAISE EXCEPTION 'Kod pocztowy musi zawierać jakieś cyfry!';
+    END IF;
+
     INSERT INTO kino(id_kino, nazwa, miasto, kod_pocztowy, ulica, numer_budynku) 
     VALUES(id_kino, nazwa, miasto, kod_pocztowy, ulica, numer_budynku);
     wynik := 'Dodano kino o parametrach: id=' || id_kino || ', nazwa=' || nazwa || ', adres=' || miasto || ', ' || kod_pocztowy || ', ' || ulica || ', ' || numer_budynku;
@@ -126,6 +148,12 @@ $$
 DECLARE
     wynik TEXT;
 BEGIN
+    IF imie !~* '[a-z]' THEN
+        RAISE EXCEPTION 'Imie musi zawierać jakieś znaki i zaczynać się od litery!';
+    END IF;
+    IF nazwisko !~* '[a-z]' THEN
+        RAISE EXCEPTION 'Nazwisko musi zawierać jakieś znaki i zaczynać się od litery!';
+    END IF;
     INSERT INTO aktor(id_aktor, imie, nazwisko, data_urodzenia) 
     VALUES(id_aktor, imie, nazwisko, data_urodzenia);
     wynik := 'Dodano aktora o parametrach: id=' || id_aktor || ', imię=' || imie || ', nazwisko=' || nazwisko || ', data=' || data_urodzenia;
@@ -141,6 +169,12 @@ $$
 DECLARE
     wynik TEXT;
 BEGIN
+    IF imie !~* '[a-z]' THEN
+        RAISE EXCEPTION 'Imie musi zawierać jakieś znaki i zaczynać się od litery!';
+    END IF;
+    IF nazwisko !~* '[a-z]' THEN
+        RAISE EXCEPTION 'Nazwisko musi zawierać jakieś znaki i zaczynać się od litery!';
+    END IF;
     INSERT INTO rezyser(id_rezyser, imie, nazwisko, data_urodzenia) 
     VALUES(id_rezyser, imie, nazwisko, data_urodzenia);
     wynik := 'Dodano reżysera o parametrach: id=' || id_rezyser || ', imię=' || imie || ', nazwisko=' || nazwisko || ', data=' || data_urodzenia;
@@ -186,6 +220,12 @@ $$
 DECLARE
     wynik TEXT;
 BEGIN
+    IF login !~* '[a-z0-9]' THEN
+        RAISE EXCEPTION 'Login musi zawierać jakieś znaki!';
+    END IF;
+    IF haslo !~* '[a-z0-9]' THEN
+        RAISE EXCEPTION 'Haslo musi zawierać jakieś znaki!';
+    END IF;
     INSERT INTO uzytkownik(id, login, haslo) 
     VALUES(id, login, haslo) ;
     wynik := 'Dodano użytkownika o parametrach: id=' || id || ', login=' || login;
@@ -270,13 +310,17 @@ ORDER BY 1, 2;
 
 --
 
+DROP TRIGGER sprawdz_date_aktora ON aktor;
+DROP TRIGGER sprawdz_date_rezysera ON rezyser;
+DROP TRIGGER sprawdz_date_seansu ON seans;
+
+
 CREATE OR REPLACE FUNCTION sprawdz_date()
 RETURNS TRIGGER AS
 $$
 BEGIN
     IF NEW.data_urodzenia > CURRENT_TIMESTAMP THEN
         RAISE EXCEPTION 'Data urodzenia nie może być później niż aktualny czas!';
-        RETURN NULL;
     ELSE
         RETURN NEW;
     END IF;
@@ -301,7 +345,6 @@ $$
 BEGIN
     IF NEW.data < CURRENT_TIMESTAMP THEN
         RAISE EXCEPTION 'Wydarzenie nie może się odbyć w przeszłości!';
-        RETURN NULL;
     ELSE
         RETURN NEW;
     END IF;
