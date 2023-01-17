@@ -206,7 +206,7 @@ def pokaz_iloscSeansowKina(conn):
     cur.close()
     return nazwy, wynik
 
-# logowanie
+# logowanie do bazy
 
 def logowanie(conn, login, haslo):
     cur = conn.cursor()

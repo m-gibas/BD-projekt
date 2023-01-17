@@ -235,7 +235,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- widoki
+-- widoki danych z tabel
 
 -- DROP VIEW aktorzyFilmu
 CREATE OR REPLACE VIEW aktorzyFilmu 
@@ -287,7 +287,7 @@ LANGUAGE 'plpgsql';
 -- SELECT * FROM logowanie('admin', 'admin');
 
 
--- funckje zliczania ilości
+-- funkcje zliczania ilości
 
 CREATE OR REPLACE VIEW iloscFilmowRezysera 
 AS
@@ -308,7 +308,7 @@ GROUP BY 1
 ORDER BY 1, 2;
 
 
---
+-- triggery do sprawdzania poprawności danych
 
 DROP TRIGGER sprawdz_date_aktora ON aktor;
 DROP TRIGGER sprawdz_date_rezysera ON rezyser;

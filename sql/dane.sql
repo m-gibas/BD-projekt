@@ -1,23 +1,4 @@
--- INSERT INTO aktor(id_aktor, imie, nazwisko, data_urodzenia) 
---     VALUES();
-    
--- INSERT INTO rezyser(id_rezyser, imie, nazwisko, data_urodzenia) 
---     VALUES();
-   
--- INSERT INTO kino(id_kino, nazwa, miasto, kod_pocztowy, ulica, numer_budynku) 
---     VALUES();
-
--- INSERT INTO film(id_film, id_rezyser, tytul, gatunek, rok) 
---     VALUES();
-    
--- INSERT INTO kino(id_kino, nazwa, miasto, kod_pocztowy) 
---     VALUES();
-   
--- INSERT INTO seans(id_seans, id_kino, id_film, data, godzina) 
---     VALUES();
-
 SET search_path to projekt;
-
 
 -- kina
 INSERT INTO kino(id_kino, nazwa, miasto, kod_pocztowy, ulica, numer_budynku) 
@@ -32,8 +13,6 @@ INSERT INTO kino(id_kino, nazwa, miasto, kod_pocztowy, ulica, numer_budynku)
     VALUES(5, 'Kino Rialto', 'Poznań', '60-111', 'Rynkowa', '8');
 INSERT INTO kino(id_kino, nazwa, miasto, kod_pocztowy, ulica, numer_budynku) 
     VALUES(6, 'Kino Wisła', 'Kraków', '31-111', 'Limanowskiego', '14');
-
-
 
 -- aktorzy
 INSERT INTO aktor(id_aktor, imie, nazwisko, data_urodzenia) 
@@ -94,7 +73,6 @@ INSERT INTO film(id_film, id_rezyser, tytul, gatunek, rok)
     VALUES(9, 4, 'Wilk z Wall Street', 'Biograficzny', 2013);
 INSERT INTO film(id_film, id_rezyser, tytul, gatunek, rok) 
     VALUES(10, 4, 'Irlandczyk', 'Kryminał', 2019);
-
 
 -- seanse
 INSERT INTO seans(id_seans, id_kino, id_film, data, godzina) 

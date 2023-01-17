@@ -2,6 +2,7 @@
 from configparser import ConfigParser
 import psycopg2
 
+# funkcja do pozyskania danych potrzebnych do zalogowania się z bazą
 def config(filename='database.ini', section='postgresql'):
     parser = ConfigParser()
     parser.read(filename)
@@ -16,7 +17,7 @@ def config(filename='database.ini', section='postgresql'):
 
     return db
 
-
+# funkcja do łączenia się z bazą
 def connect():
     conn = None
     try:
@@ -27,7 +28,7 @@ def connect():
         print(error)
         return 0
 
-
+# funkcja do rozłączenia się z bazą
 def disconnect(conn):
     if conn is not None:
         conn.close()

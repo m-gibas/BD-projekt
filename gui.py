@@ -2,16 +2,16 @@ import PySimpleGUI as sg
 import funkcje
 from config import connect, disconnect
 
-
+# połączenie z bazą i nadanie odpowiedniej ścieżki
 if __name__ == '__main__':
     conn = connect()
     cur = conn.cursor()
     cur.execute("SET search_path TO projekt;")
 
-
-w, h = 640, 480
+# rodzaj wyglądu aplikacji
 sg.theme('DarkGreen3')   
 
+# wszystkie potrzebne widoki aplikacji
 widokLogowanie = [[
             [sg.Text('Login: '), sg.Input('', size=(12,2), pad=(10,10), key='login'),
             sg.Text('Hasło: '), sg.Input('', size=(12,2), key='haslo'),],
@@ -64,13 +64,9 @@ widokDodajSeans = [[
             sg.Text('Godzina wydarzenia (w formacie \'HH:MM\'): '), sg.Input('', size=(5,2), key='godzinaSeans'),
             ]]
 
-# frameLayout = [
-#             [sg.Checkbox('Onion',key='Onion Sauce'),
-#             sg.Checkbox('Paprika',key='Paprika'),
-#             sg.Checkbox('Schezwan',key='Schezwan'),
-#             sg.Checkbox('Tandoori',key='Tandoori')]
-#             ]
 
+
+# funkcja do pokazywania okna z wartościami tabel (danymi)
 def otworz_liste(nazwy, wartosci):
     layout = [
         [sg.Table(values=wartosci, headings=nazwy, key='lista')],
@@ -82,6 +78,7 @@ def otworz_liste(nazwy, wartosci):
             break
     window.close()
 
+# funkcja do pokazywania okna z raportami
 def otworz_liste2(arr):
     layout = [
         [sg.Table(values=arr[1], headings=arr[0], key='lista')],
@@ -94,14 +91,8 @@ def otworz_liste2(arr):
             break
     window.close()
 
-def otworz_okno(layout):
-    window = sg.Window("Okno", layout, modal=True)
-    while True:
-        event, values = window.read()
-        if event == "Wyjście" or event == sg.WIN_CLOSED:
-            break
-    window.close()
 
+# główny widok posiadający wszystkie potrzebne podwidoki 
 layout = [  [sg.Column([[sg.Button('Wyjście' )]], element_justification='right', expand_x=True)],
 
             [sg.Frame('Dodaj kino', widokDodajKino, title_color='chocolate2', border_width=5)],
@@ -122,20 +113,12 @@ layout = [  [sg.Column([[sg.Button('Wyjście' )]], element_justification='right'
                 sg.Button("Pokaż seanse kin", pad=(10,0), key='pokaz_seanseKina'),
                 ]],
             pad=(10,10) ,title_color='chocolate2', border_width=5)],
-            
-            
-            
-            # [sg.Text("", key='-OUTPUT-', pad=(0,10))],
-            # [sg.Listbox(values="", size=(100, 5), key='_LISTBOX_', background_color='red')],
-            # [sg.Listbox(values="", size=(5, 10), pad=(0, 0), no_scrollbar=True, enable_events=True, key='IDS')],
-            # [sg.Text(" Nasz obrazek:", key='-TXT-', size=(25, 2), pad=(0, 0), expand_x=True, expand_y=False, visible=False),
-            # sg.Text(" Obraz przewidzianego pająka:", key='-TXT2-', size=(25, 2), pad=(0, 0), expand_x=True, expand_y=False, visible=False)],
             ]
 
 
 
 
-
+# okno wyświetlające główną zawartość programu
 def glowne_okno():
     window = sg.Window('Kino', layout, size=(1000, 700), finalize=True)
     while True:
@@ -183,7 +166,6 @@ def glowne_okno():
             nazwy, wartosci = funkcje.pokaz_kina(conn)
             otworz_liste(nazwy, wartosci)
 
-
         if event == "pokaz_seanse":
             nazwy, wartosci = funkcje.pokaz_seanse(conn)
             otworz_liste(nazwy, wartosci)
@@ -200,7 +182,7 @@ def glowne_okno():
             nazwy, wartosci = funkcje.pokaz_rezyserow(conn)
             otworz_liste(nazwy, wartosci)
 
-    # funkcje wyświetlania widoków
+    # funkcje wyświetlania raportów
 
         if event == "pokaz_aktorzyFilmu":
             nazwy, wartosci = funkcje.pokaz_aktorzyFilmu(conn)
@@ -218,12 +200,11 @@ def glowne_okno():
             otworz_liste2([nazwy, wartosci, nazwy2, wartosci2])
 
 
-
-
     window.close()
     disconnect(conn)
 
 
+# okno logowania i rejestracji do systemu
 window = sg.Window("Logowanie", widokLogowanie, modal=True)
 while True:
     event, values = window.read()
